@@ -12,6 +12,12 @@ class PlanCatalog:
             raise ValidationError("price cannot be negative")
         if plan.interval not in ("month", "year"):
             raise ValidationError("unknown interval: %s" % plan.interval)
+        if not plan.name or not plan.name.strip():
+            raise ValidationError("name cannot be empty")
+        if plan.trial_days < 0:
+            raise ValidationError("trial_days cannot be negative")
+        if plan.included_units < 0:
+            raise ValidationError("included_units cannot be negative")
         return self.repo.add(plan)
 
     def get(self, plan_id):
