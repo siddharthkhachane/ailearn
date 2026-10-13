@@ -53,6 +53,32 @@ def test_catalog_rejects_negative_price_and_bad_interval():
         cat.add(Plan("b", "B", D("1"), interval="week"))
 
 
+@pytest.mark.parametrize("name", ["", "   "])
+def test_catalog_rejects_empty_or_whitespace_name(name):
+    cat = PlanCatalog()
+    with pytest.raises(ValidationError):
+        cat.add(Plan("a", name, D("1")))
+
+
+def test_catalog_rejects_negative_trial_days():
+    cat = PlanCatalog()
+    with pytest.raises(ValidationError):
+        cat.add(Plan("a", "A", D("1"), trial_days=-1))
+
+
+def test_catalog_rejects_negative_included_units():
+    cat = PlanCatalog()
+    with pytest.raises(ValidationError):
+        cat.add(Plan("a", "A", D("1"), included_units=-1))
+
+
+def test_catalog_accepts_zero_trial_days_and_included_units():
+    cat = PlanCatalog()
+    cat.add(Plan("a", "A", D("1"), trial_days=0, included_units=0))
+    assert cat.get("a").trial_days == 0
+    assert cat.get("a").included_units == 0
+
+
 def test_list_active_sorted_by_price_and_skips_inactive():
     cat = PlanCatalog()
     cat.add(Plan("big", "Big", D("50")))
