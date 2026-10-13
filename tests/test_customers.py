@@ -62,7 +62,7 @@ def test_list_page(svc):
 
 def test_credit_helpers():
     c = Customer("c1", "A", "a@b.c")
-    assert c.addCredit(5) == D("5")
+    assert c.add_credit(5) == D("5")
     assert c.use_credit(D("3")) == D("3")
     assert c.use_credit(D("10")) == D("2")
     assert c.credit_balance == D("0")
@@ -70,7 +70,16 @@ def test_credit_helpers():
 
 def test_add_credit_rejects_non_positive():
     with pytest.raises(ValueError):
-        Customer("c1", "A", "a@b.c").addCredit(0)
+        Customer("c1", "A", "a@b.c").add_credit(0)
+
+
+def test_add_credit_camelcase_alias_still_works():
+    assert Customer.addCredit is Customer.add_credit
+    c = Customer("c1", "A", "a@b.c")
+    assert c.addCredit(D("4")) == D("4")
+    assert c.credit_balance == D("4")
+    with pytest.raises(ValueError):
+        c.addCredit(0)
 
 
 def test_service_add_credit(svc):
@@ -81,7 +90,7 @@ def test_service_add_credit(svc):
 
 def test_customer_dict_roundtrip():
     c = Customer("c1", "A", "a@b.c", region="DE", payment_token="tok")
-    c.addCredit(D("2.50"))
+    c.add_credit(D("2.50"))
     clone = Customer.from_dict(c.to_dict())
     assert (clone.id, clone.region, clone.payment_token) == ("c1", "DE", "tok")
     assert clone.credit_balance == D("2.50")

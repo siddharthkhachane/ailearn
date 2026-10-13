@@ -61,7 +61,7 @@ def test_declined_charge_leaves_invoice_open(app, customer):
 
 
 def test_credit_is_used_before_card(app, customer):
-    customer.addCredit(D("10.00"))
+    customer.add_credit(D("10.00"))
     inv = open_invoice(customer.id)
     app.payments.collect(inv)
     assert app.gateway.charges[0]["amount_cents"] == 1500
@@ -70,7 +70,7 @@ def test_credit_is_used_before_card(app, customer):
 
 
 def test_credit_covering_everything_skips_gateway(app, customer):
-    customer.addCredit(D("100.00"))
+    customer.add_credit(D("100.00"))
     inv = open_invoice(customer.id)
     p = app.payments.collect(inv)
     assert p.status == "succeeded"
