@@ -39,7 +39,7 @@ class InvoiceService:
         customer = self.customers.get(sub.customer_id)
         if proration["net"] <= 0:
             if proration["net"] < 0:
-                customer.addCredit(-proration["net"])
+                customer.add_credit(-proration["net"])
             return None
         inv = Invoice(customer.id, sub.id, issue_date=today)
         inv.add_line("Unused time on previous plan", 1, -proration["credit"], kind="proration")

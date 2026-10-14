@@ -119,7 +119,7 @@ def test_multiple_customers_billed_independently(app, jan15):
 
 
 def test_credit_balance_reduces_renewal_charge(app, customer, jan15):
-    customer.addCredit(D("4.00"))
+    customer.add_credit(D("4.00"))
     app.subs.create(customer.id, "basic", start=jan15)
     app.billing_run.run(date(2024, 2, 15))
     assert app.gateway.charges[0]["amount_cents"] == 600

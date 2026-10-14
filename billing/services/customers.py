@@ -36,7 +36,7 @@ class CustomerService:
         return customer
 
     def add_credit(self, customer_id, amount):
-        return self.get(customer_id).addCredit(amount)
+        return self.get(customer_id).add_credit(amount)
 
     def list_page(self, page=1, per_page=20):
         customers = sorted(self.repo.all(), key=lambda c: c.id)

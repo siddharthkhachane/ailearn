@@ -4,8 +4,8 @@ from decimal import Decimal
 class Customer(object):
     """A paying customer.
 
-    Old-style class from before we adopted dataclasses; some callers still
-    use the camelCase helpers.
+    Old-style class from before we adopted dataclasses. `addCredit` is kept
+    as an alias of `add_credit` for scripts outside this repo.
     """
 
     def __init__(self, id, name, email, region="US-CA", timezone="UTC", payment_token=None):
@@ -17,12 +17,14 @@ class Customer(object):
         self.payment_token = payment_token
         self.credit_balance = Decimal("0")
 
-    def addCredit(self, amount):
+    def add_credit(self, amount):
         amount = Decimal(amount)
         if amount <= 0:
             raise ValueError("credit must be positive")
         self.credit_balance += amount
         return self.credit_balance
+
+    addCredit = add_credit
 
     def use_credit(self, amount):
         """Consume up to `amount` of the balance, returning what was used."""
