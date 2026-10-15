@@ -30,6 +30,12 @@ def test_invoice_ready_shows_total_and_due_date():
     assert str(inv.due_date) in body
 
 
+def test_invoice_ready_without_credit_shows_total():
+    subject, body = templates.invoice_ready(make_customer(), make_invoice())
+    assert subject == "Your invoice INV-2024-00001"
+    assert "$1,234.50" in body
+
+
 def test_payment_failed_uses_amount_due_and_shows_next_retry():
     inv = make_invoice()
     inv.credit_applied = D("34.50")  # amount due ($1,200.00) differs from the invoice total
@@ -61,3 +67,4 @@ def test_subscription_canceled():
     subject, body = templates.subscription_canceled(make_customer())
     assert subject == "Your subscription has been canceled"
     assert "Ada" in body
+    assert "canceled" in body
